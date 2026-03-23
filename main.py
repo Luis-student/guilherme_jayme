@@ -53,29 +53,31 @@ def listar():
 # deletar usuario 
 
 def deletar():
-  connect = mysql.connect('guilherme_jayme')
-  cursor = connect.cursor()
-  cursor.execute("DELETE FROM Usuario WHERE id = ?", (id))
-  connect.commit()
-  connect.close()
-  print(f"USUARIO {id} FOI REMOVIDO!!!")
-  
-  
+  id_usuario = int(input("Insira o ID para deletar: "))
+
+  cursor.execute("SELECT * FROM usuario WHERE id = %s", (id_usuario,))
+  usuario = cursor.fetchone()
+
+  if usuario:
+    cursor.execute("DELETE FROM usuario WHERE id = %s", (id_usuario,))
+    banco.commit()
+    print("Seu usuario foi deletado !!!")
+    
 # login 
 
-def login(email, senha):
-  email = input("Ensira seu emial: ")
+def login():
+  email = input("Ensira seu email: ")
   senha = input("Ensira sua senha: ")
 
-  sql_login = "SELECT * FROM usuario WHERE email = %s AND senha  %s"
-  valores_login = (email, senha )
+  sql_login = "SELECT * FROM usuario WHERE email = %s AND senha = %s"
+  valores_login = (email, senha)
 
   cursor.execute(sql_login, valores_login)
-  resultado = cursor.fetchall()
+  resultado = cursor.fetchone()
 
-  if resultado :
+  if resultado:
     print("LOGIN REALIZADO COM SUCESSO!!!")
-    print(f"Bem-vindo, {resultado[0]}")
+    print(f"Bem-vindo, {resultado[1]}")
   else:
     print("email ou senha incorreta!")
 
@@ -90,7 +92,7 @@ def menu():
     print ("4- Login")
     print ("5- SAIR")
     
-    opcao = input("Insira uma das opçoes acima")
+    opcao = input("Insira uma das opçoes acima : ")
     
     if opcao == "1":
       cadastro()
@@ -101,11 +103,11 @@ def menu():
     elif opcao == "4":
       login()
     elif opcao == "5":
-      print ("VOÇE SAIU DO SISTEMAS!") 
+      print ("VOÇÊ SAIU DO SISTEMAS!") 
       break
     else:
       print ("OPÇÃO NÃO VALIDA")  
-      
-      
-    
+
+#chamar função 
+#menu()
 
