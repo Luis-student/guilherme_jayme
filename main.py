@@ -79,4 +79,33 @@ def login(email, senha):
   else:
     print("email ou senha incorreta!")
 
+# MENU de inicio
+def menu():
+  while True:
+    
+    print ("========== MENU ==========")
+    print ("1- Inserir Dados")
+    print ("2- Listar Usuario")
+    print ("3- Deletar Usuario")
+    print ("4- Login")
+    print ("5- SAIR")
+    
+    opcao = input("Insira uma das opçoes acima")
+    
+    if opcao == "1":
+      cadastro()
+    elif opcao == "2":
+      listar()
+    elif opcao == "3":
+      deletar()
+    elif opcao == "4":
+      login()
+    elif opcao == "5":
+      print ("VOÇE SAIU DO SISTEMAS!") 
+      break
+    else:
+      print ("OPÇÃO NÃO VALIDA")  
+      
+      
+    
 
