@@ -26,4 +26,20 @@ cursor.execute("""
 )
 """)
 
+def cadastro():
+    username = input("Digite seu nome: ")
+    email = input("Digite seu email: ")
+    senha = int (input("Digite sua senha: "))
+    idade = int (input("Digite sua idade: "))
+    
+    sql = "INSERT INTO usuario (username, email, senha, idade) VALUES (%s, %s, %s, %s)" 
+    valores = (username, email, senha, idade)
+    
+    cursor.execute(sql, valores)
+    banco.commit()
+    
+    print ("USUARIO CADASTRADO!!")
+    
+
+
 
