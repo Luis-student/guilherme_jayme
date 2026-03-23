@@ -26,6 +26,7 @@ cursor.execute("""
 )
 """)
 
+# cadastro usuario 
 def cadastro():
     username = input("Digite seu nome: ")
     email = input("Digite seu email: ")
@@ -40,6 +41,14 @@ def cadastro():
     
     print ("USUARIO CADASTRADO!!")
     
+# listar usuarios 
+
+def listar():
+    cursor.execute("SELECT * FROM usuario")
+
+    for linha in cursor.fetchall():
+        print(linha)
+
 
 
 
