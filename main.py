@@ -44,11 +44,21 @@ def cadastro():
 # listar usuarios 
 
 def listar():
-    cursor.execute("SELECT * FROM usuario")
+  cursor.execute("SELECT * FROM usuario")
 
-    for linha in cursor.fetchall():
-        print(linha)
+  for linha in cursor.fetchall():
+    print(linha)
 
+
+def deletar():
+  connect = mysql.connect('guilherme_jayme')
+  cursor = connect.cursor()
+  cursor.execute("DELETE FROM Usuario WHERE id = ?", (id))
+  connect.commit()
+  connect.close()
+  print(f"USUARIO {id} FOI REMOVIDO!!!")
+  
+  
 
 
 
