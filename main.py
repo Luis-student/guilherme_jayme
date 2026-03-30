@@ -1,9 +1,11 @@
-# conexão com o bnaco 
+from flask import Flask, jsonify, request 
+app = Flask(__name__)
+
 
 import mysql.connector 
 
 banco = mysql.connector.connect(
-    host= "10.30.29.162",
+    host= "10.30.29.183",
     port= 3309,
     user= "root",
     password= "root123"
@@ -28,27 +30,31 @@ cursor.execute("""
 """)
 
 # cadastro usuario 
+@app.route('/cadastro', methods = ['POST'])
 def cadastro():
-    username = input("Digite seu nome: ")
-    email = input("Digite seu email: ")
-    senha = int (input("Digite sua senha: "))
-    idade = int (input("Digite sua idade: "))
-    
-    sql = "INSERT INTO usuario (username, email, senha, idade) VALUES (%s, %s, %s, %s)" 
-    valores = (username, email, senha, idade)
-    
-    cursor.execute(sql, valores)
-    banco.commit()
-    
-    print ("USUARIO CADASTRADO!!")
-    
-# listar usuarios 
+    dados = request.json
+    print(request.remote_addr)
+    user_name = dados['user_name']
+    email = dados["email"]
+    idade = dados["idade"]
+    senha = dados["senha"]
 
+    cadastro(user_name, email, idade, senha)
+
+    return jsonify(dados)
+    
+@app.route("/", methods = ["GET"])
+def padrao():
+  print(request.remote_addr)
+  return "<h1>Bem Vindo!"
+
+# listar usuarios 
+@app.route('/usuario', methods = ['GET'] )
 def listar():
   cursor.execute("SELECT * FROM usuario")
 
-  for linha in cursor.fetchall():
-    print(linha)
+  usuario = cursor.fetchall()
+  return jsonify(usuario)
 
 # deletar usuario 
 
@@ -111,3 +117,11 @@ def menu():
 #chamar função 
 #menu()
 
+def cadastro(username, email, idade, senha):
+    cursor.execute(f"INSERT INTO usuario (username, email, senha, idade) VALUES ('{username}', '{email}', '{senha}', {idade})")
+    banco.commit()
+    
+    print ("USUARIO CADASTRADO!!")
+
+
+app.run(port=3007, host='localhost', debug=True)
