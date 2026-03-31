@@ -5,7 +5,7 @@ app = Flask(__name__)
 import mysql.connector 
 
 banco = mysql.connector.connect(
-    host= "10.30.29.183",
+    host= "10.30.29.100",
     port= 3309,
     user= "root",
     password= "root123"
@@ -29,9 +29,10 @@ cursor.execute("""
 )
 """)
 
+
 # cadastro usuario 
 @app.route('/cadastro', methods = ['POST'])
-def cadastro():
+def criar ():
     dados = request.json
     print(request.remote_addr)
     user_name = dados['user_name']
@@ -42,11 +43,21 @@ def cadastro():
     cadastro(user_name, email, idade, senha)
 
     return jsonify(dados)
+
+
+#Cadastro 
+def cadastro(username, email, idade, senha):
+    cursor.execute(f"INSERT INTO usuario (username, email, senha, idade) VALUES ('{username}', '{email}', '{senha}', {idade})")
+    banco.commit()
     
+    print ("USUARIO CADASTRADO!!")
+   
+
 @app.route("/", methods = ["GET"])
 def padrao():
   print(request.remote_addr)
   return "<h1>Bem Vindo!"
+
 
 # listar usuarios 
 @app.route('/usuario', methods = ['GET'] )
@@ -56,19 +67,22 @@ def listar():
   usuario = cursor.fetchall()
   return jsonify(usuario)
 
-# deletar usuario 
 
+# deletar usuario 
+@app.route('/deletar', methods = ["DELETE"])
 def deletar():
   id_usuario = int(input("Insira o ID para deletar: "))
 
-  cursor.execute("SELECT * FROM usuario WHERE id = %s", (id_usuario,))
+  cursor.execute(f"SELECT * FROM usuario WHERE id = {id_usuario}")
   usuario = cursor.fetchone()
 
   if usuario:
-    cursor.execute("DELETE FROM usuario WHERE id = %s", (id_usuario,))
+    cursor.execute(f"DELETE FROM usuario WHERE id = {id_usuario}")
     banco.commit()
-    print("Seu usuario foi deletado !!!")
-    
+
+    return jsonify('Usuario cadastrado com sucesso !!!')
+  
+
 # login 
 
 def login():
@@ -116,12 +130,5 @@ def menu():
 
 #chamar função 
 #menu()
-
-def cadastro(username, email, idade, senha):
-    cursor.execute(f"INSERT INTO usuario (username, email, senha, idade) VALUES ('{username}', '{email}', '{senha}', {idade})")
-    banco.commit()
-    
-    print ("USUARIO CADASTRADO!!")
-
 
 app.run(port=3007, host='localhost', debug=True)
