@@ -84,22 +84,28 @@ def deletar():
   
 
 # login 
-
+@app.route('/login', methods = ['POST'])
 def login():
-  email = input("Ensira seu email: ")
-  senha = input("Ensira sua senha: ")
+    dados = request.json
 
-  sql_login = "SELECT * FROM usuario WHERE email = %s AND senha = %s"
-  valores_login = (email, senha)
+    email = dados["email"]
+    senha = dados["senha"]
 
-  cursor.execute(sql_login, valores_login)
-  resultado = cursor.fetchone()
+    sql_login = "SELECT * FROM usuario WHERE email = %s AND senha = %s"
+    valores_login = (email, senha)
 
-  if resultado:
-    print("LOGIN REALIZADO COM SUCESSO!!!")
-    print(f"Bem-vindo, {resultado[1]}")
-  else:
-    print("email ou senha incorreta!")
+    cursor.execute(sql_login, valores_login)
+    usuario = cursor.fetchone()
+
+    if usuario:
+        return jsonify({
+            "mensagem": "Login realizado com sucesso",
+            "usuario": usuario[1]
+        })
+    else:
+        return jsonify({
+            "mensagem": "Email ou senha incorretos"
+        }), 401
 
 # MENU de inicio
 def menu():
