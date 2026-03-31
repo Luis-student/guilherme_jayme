@@ -1,6 +1,10 @@
 from flask import Flask, jsonify, request 
 app = Flask(__name__)
 
+from flask_cors import CORS
+from flask_cors import CORS
+
+CORS(app)
 
 import mysql.connector 
 
@@ -71,8 +75,9 @@ def listar():
 # deletar usuario 
 @app.route('/deletar', methods = ["DELETE"])
 def deletar():
-  id_usuario = int(input("Insira o ID para deletar: "))
-
+  dados = request.json  
+  id_usuario = dados["id_usuario"]
+ 
   cursor.execute(f"SELECT * FROM usuario WHERE id = {id_usuario}")
   usuario = cursor.fetchone()
 
@@ -137,4 +142,4 @@ def menu():
 #chamar função 
 #menu()
 
-app.run(port=3007, host='localhost', debug=True)
+app.run(port=3007, host='10.30.29.7', debug=True)
